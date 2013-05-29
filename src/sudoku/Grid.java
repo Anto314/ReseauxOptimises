@@ -1,5 +1,7 @@
 package sudoku;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -244,5 +246,63 @@ public class Grid
         assert column > 0;
         assert column < _width;
         _cells[row][column] = value;
+    }
+    
+    /** Tell if the grid is correctly filled according to Sudoku rules.
+     * This function does not care about empty cells.
+     * @return true if the grid is correctly filled or false if there is a mistake.
+     */
+   /* public boolean isCorrectlyFilled()
+    {
+        boolean isNumberFound[] = new boolean[_numbersCount];
+        
+        // Check each row to find one and only one instance of each number
+        for (int row = 0; row < _height; row++)
+        {
+            // Reset array
+            for (int i = 0; i < isNumberFound.length; i++) isNumberFound[i] = false;
+            
+            for (int column = 0; column < _width; column++)
+            {
+                byte cellValue = _cells[row][column];
+                if (cellValue == 0) continue; // Avoid empty cells
+                if (isNumberFound[cellValue]) return false;
+                isNumberFound[cellValue] = true;
+            }
+        }
+        
+        // Check each column to find one and only one instance of each number
+        for (int column = 0; column < _width; column++)
+        {
+            // Reset array
+            for (int i = 0; i < isNumberFound.length; i++) isNumberFound[i] = false;
+            
+            for (int row = 0; row < _height; row++)
+            {
+                byte cellValue = _cells[row][column];
+                if (cellValue == 0) continue; // Avoid empty cells
+                if (isNumberFound[cellValue]) return false;
+                isNumberFound[cellValue] = true;
+            }
+        }
+        
+        // Check each square to find one and only one instance of each number
+    }*/
+    
+    /** Get all empty cells of the grid.
+     * @return A list of points (x = column; y = row) representing all empty cells.
+     */
+    public ArrayList<Point> getEmptyCells()
+    {
+        ArrayList<Point> result = new ArrayList<Point>();
+        
+        for (int row = 0; row < _height; row++)
+        {
+            for (int column = 0; column < _width; column++)
+            {
+                if (_cells[row][column] == 0) result.add(new Point(column, row));
+            }
+        }
+        return result;
     }
 }
