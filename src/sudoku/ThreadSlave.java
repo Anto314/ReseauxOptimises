@@ -10,4 +10,8 @@ public class ThreadSlave extends Thread{
         this.setName("Slave"+Integer.toString(threadNumber));
     }
     
+    @Override
+    public void run(){
+        System.out.println(getName());
+    }
 }
