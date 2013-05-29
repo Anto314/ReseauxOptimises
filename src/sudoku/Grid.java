@@ -62,6 +62,24 @@ public class Grid
         }       
     }
     
+    /** Create a new grid filled with the content of another. */
+    public Grid(Grid grid)
+    {
+        _width = grid._width;
+        _height = grid._height;
+        _numbersCount = grid._numbersCount;
+        _squaresCount = grid._squaresCount;
+        
+        for (int row = 0; row < grid._height; row++)
+        {
+            for (int column = 0; column < grid._width; column++)
+            {
+                _cells[row][column] = grid._cells[row][column];
+                _lastGridCells[row][column] = grid._lastGridCells[row][column];
+            }
+        }
+    }
+    
     /** Display grid content to the console. */
     public void show()
     {
@@ -110,7 +128,7 @@ public class Grid
     /** Get a list of the allowed missing numbers for a specified cell.
      * @param row Cell row coordinate.
      * @param column Cell column coordinate.
-     * @return The allowed numbers for this cell.
+     * @return The allowed numbers for this cell or null if the cell is not empty.
      */
     public ArrayList<Byte> getPossibleNumberAt(int row, int column)
     {
@@ -155,6 +173,22 @@ public class Grid
         return result;
     }
     
+    /** Get the width of the grid.
+     * @return The grid width.
+     */
+    public int getWidth()
+    {
+        return _width;
+    }
+    
+    /** Get the height of the grid.
+     * @return The grid height.
+     */
+    public int getHeight()
+    {
+        return _height;
+    }
+    
     /**
      * Compute figure that can be put at cass (i,j) according to Sudoku rule
      *
@@ -182,4 +216,33 @@ public class Grid
         }
         return possibleNumber;
     }*/
+    
+    /** Tell if all cells are filled in or not.
+     * @return true if all cells are filled or false if not.
+     */
+    public boolean isEntirelyFilled()
+    {
+        for (int row = 0; row < _height; row++)
+        {
+            for (int column = 0; column < _width; column++)
+            {
+                if (_cells[row][column] == 0) return false;
+            }
+        }
+        return true;
+    }
+    
+    /** Set a cell value.
+     * @param row Cell row coordinate.
+     * @param column Cell column coordinate.
+     * @param value Cell value.
+     */
+    public void setCell(int row, int column, byte value)
+    {
+        assert row > 0;
+        assert row < _height;
+        assert column > 0;
+        assert column < _width;
+        _cells[row][column] = value;
+    }
 }

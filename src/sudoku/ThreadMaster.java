@@ -79,7 +79,7 @@ public class ThreadMaster extends Thread{
         System.out.println("Finish");
     }
     
-    public void prepare(){
+   /* public void prepare(){
         
         int maxPossibility = -1;
         ArrayList<Byte> a;
@@ -98,6 +98,29 @@ public class ThreadMaster extends Thread{
                       jMax = j;
                   }
               }
+        maxSlave = maxPossibility;
+    }*/
+    
+    public void prepare(){
+        int maxPossibility = -1;
+        int width = grid.getWidth();
+        int height = grid.getHeight();
+        
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {    
+                ArrayList<Byte> a = grid.getPossibleNumberAt(i, j);
+                if (a == null) continue; // Cell is filled yet
+                
+                if(a.size()>maxPossibility){
+                    maximalPossibility = a;
+                    maxPossibility = a.size();
+                    iMax = i;
+                    jMax = j;
+                }
+            }
+        }
         maxSlave = maxPossibility;
     }
 }
