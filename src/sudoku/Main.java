@@ -21,16 +21,17 @@ public class Main
         Grid grid;
         try
         {
-            grid = new Grid("Grids/Medium_1.txt");
+            grid = new Grid(args[0]);
         }
         catch (FileNotFoundException exception)
         {
-            System.out.println("Error : can't find '" + args[0] + "' grid file");
+            System.out.println("Error : can't find '" + args[0] + "' grid file" + exception.getMessage());
             return;
         }
         
                 // TEST
-                grid.show();
+                grid.showDifferences();
+                grid.showDifferences();
         
         
     }

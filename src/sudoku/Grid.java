@@ -52,15 +52,21 @@ public class Grid
                 _cells[row][column] = cellValue;
                 _lastGridCells[row][column] = cellValue;
             }
+            
+                _cells[3][5] = 8;
         }       
     }
     
-    /** Display grid content to the console */
+    /** Display grid content to the console. */
     public void show()
     {
         for (int row = 0; row < _height; row++)
         {
-            for (int column = 0; column < _width; column++) System.out.print(_cells[row][column] + " ");
+            for (int column = 0; column < _width; column++)
+            {
+                if (_cells[row][column] == 0) System.out.print(". ");
+                else System.out.print(_cells[row][column] + " ");
+            }
             System.out.println();
         }
         System.out.println();
@@ -69,7 +75,30 @@ public class Grid
     /** Display the grid and colorize changes between the current grid and the last call of this function. */
     public void showDifferences()
     {
-   
-    
+        for (int row = 0; row < _height; row++)
+        {
+            for (int column = 0; column < _width; column++)
+            {
+                // Check if there is a difference between this last cell and current cell
+                boolean isColorChanged = false;
+                if (_lastGridCells[row][column] != _cells[row][column])
+                {
+                    System.out.print("\u001B[34m"); // Use VT100 escape sequence
+                    isColorChanged = true;
+                }
+                
+                // Show value
+                if (_cells[row][column] == 0) System.out.print(". ");
+                else System.out.print(_cells[row][column] + " ");
+                
+                // Restore color if needed
+                if (isColorChanged) System.out.print("\u001B[0m");
+                
+                // Update last grid in the same time
+                _lastGridCells[row][column] = _cells[row][column];
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 }
