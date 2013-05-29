@@ -104,11 +104,11 @@ public class Grid
             for (int column = 0; column < _width; column++)
             {
                 // Check if there is a difference between this last cell and current cell
-                boolean isColorChanged = false;
+                boolean hasColorChanged = false;
                 if (_lastGridCells[row][column] != _cells[row][column])
                 {
                     System.out.print("\u001B[34m"); // Use VT100 escape sequence
-                    isColorChanged = true;
+                    hasColorChanged = true;
                 }
                 
                 // Show value
@@ -116,7 +116,7 @@ public class Grid
                 else System.out.print(_cells[row][column] + " ");
                 
                 // Restore color if needed
-                if (isColorChanged) System.out.print("\u001B[0m");
+                if (hasColorChanged) System.out.print("\u001B[0m");
                 
                 // Update last grid in the same time
                 _lastGridCells[row][column] = _cells[row][column];
@@ -133,8 +133,8 @@ public class Grid
      */
     public ArrayList<Byte> getPossibleNumberAt(int row, int column)
     {
-        // Be sure that the requested cell is empty
-        assert _cells[row][column] == 0;
+        // Check if the cell is empty
+        if (_cells[row][column] != 0) return null;
         
         // Tell if a number is existing or not at the end of the process
         boolean existingNumbers[] = new boolean[_numbersCount + 1];
