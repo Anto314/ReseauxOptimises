@@ -1,6 +1,8 @@
 
 package sudoku;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,28 +11,53 @@ import java.util.logging.Logger;
  */
 public class ThreadMaster extends Thread{
     
+    
+    /**
+     * row index of maximalPossibility
+     */
+    private int iMax;
+    
+    /**
+     * column index of maximalPossibility
+     */
+    
+    private int jMax;
+    /**
+     * Maximal possibility of number
+     */
+    private ArrayList<Byte> maximalPossibility;
     /**
      * Maximal number of slave which could be created
      */
     private int maxSlave;
 
     /**
+     * Sudoku grid
+     */
+    Grid grid;
+    
+    /**
      * Create a new ThreadMaster
      * @param name name given to this Thread
+     * @param grid sudoku grid
      */
-    public ThreadMaster(String name){
+    public ThreadMaster(String name,Grid grid){
         this.setName(name);
         maxSlave = 10;
+        this.grid = grid;
     }
     /**
      * Create a new ThreadMaster
      * @param name name given to this Thread
      * @param maxSlave  maximal number of slave
+     * @param grid  sudoku grid
      */
-    public ThreadMaster(String name,int maxSlave){
+    public ThreadMaster(String name,int maxSlave,Grid grid){
         this.setName(name);
         this.maxSlave = maxSlave;
+        this.grid = grid;
     }
+    
     
     public int getMaxSlave() {
         return maxSlave;
@@ -43,14 +70,34 @@ public class ThreadMaster extends Thread{
     public void run(){
         System.out.println(getName());
         ThreadSlave slaves[] = new ThreadSlave[maxSlave];
-        for(int i = 0;i<maxSlave;i++){
-            slaves[i] = new ThreadSlave(i);
-            slaves[i].start();
-            try {
-                slaves[i].join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ThreadMaster.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        int cpt = 0;
+        Iterator<Byte> it = maximalPossibility.iterator();
+        while(it.hasNext()){
+            byte current = it.next();
+            
         }
+        System.out.println("Finish");
+    }
+    
+    public void prepare(){
+        
+        int maxPossibility = -1;
+        ArrayList<Byte> a;
+        int length = grid.getWidth();
+        byte cells[][] = grid.getCells();
+                
+        for(int i =0;i<length;i++)
+            for(int j =0;i<length;j++)
+              if(cells[i][j]==-1)
+              {
+                  a = grid.getPossibleNumberAt(i, j);
+                  if(a.size()>maxPossibility){
+                      maximalPossibility = a;
+                      maxPossibility = a.size();
+                      iMax = i;
+                      jMax = j;
+                  }
+              }
+        maxSlave = maxPossibility;
     }
 }

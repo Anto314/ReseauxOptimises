@@ -9,7 +9,6 @@ public class Main
 {
     public static void main(String args[])
     {
-        
         // Check parameters
         if (args.length != 1)
         {

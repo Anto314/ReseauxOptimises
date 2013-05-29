@@ -29,6 +29,18 @@ public class Grid {
      */
     private byte _lastGridCells[][];
 
+    public byte[][] getCells() {
+        return _cells;
+    }
+
+    public int getWidth() {
+        return _width;
+    }
+
+    public int getHeight() {
+        return _height;
+    }
+
     /**
      * Create a new grid from a file.
      *
@@ -131,15 +143,16 @@ public class Grid {
             figureRow[k] = false;
             figureColumn[k] = false;
         }
-        
-        for(int k = 0;k<_width;k++){
-            figureRow[_cells[i][k]-1] = true;
-            figureColumn[_cells[k][j]-1] = true;  
+
+        for (int k = 0; k < _width; k++) {
+            figureRow[_cells[i][k] - 1] = true;
+            figureColumn[_cells[k][j] - 1] = true;
         }
-        
-        for(int k =0;k<_width;k++){
-            if(!figureRow[k] && !figureColumn[k])
-                possibleNumber.add(new Byte((byte)(k+1)));
+
+        for (int k = 0; k < _width; k++) {
+            if (!figureRow[k] && !figureColumn[k]) {
+                possibleNumber.add(new Byte((byte) (k + 1)));
+            }
         }
         return possibleNumber;
     }
