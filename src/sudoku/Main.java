@@ -37,12 +37,5 @@ public class Main
             System.out.println("Error : can't find '" + args[0] + "' grid file" + exception.getMessage());
             return;
         }
-        
-        
-        
-                // TEST
-                grid.showDifferences();
-                
-                System.out.println(grid.getCellMissingNumbers(0, 3));
     }
 }
