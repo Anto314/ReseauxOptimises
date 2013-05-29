@@ -69,7 +69,6 @@ public class ThreadMaster extends Thread{
     @Override
     public void run(){
         System.out.println(getName());
-        prepare();
         ThreadSlave slaves[] = new ThreadSlave[maxSlave];
         int cpt = 0;
         Iterator<Byte> it = maximalPossibility.iterator();
@@ -84,7 +83,6 @@ public class ThreadMaster extends Thread{
             } catch (InterruptedException ex) {
                 Logger.getLogger(ThreadMaster.class.getName()).log(Level.SEVERE, null, ex);
             }
-                   cpt++;
         }
         System.out.println("Finish");
     }

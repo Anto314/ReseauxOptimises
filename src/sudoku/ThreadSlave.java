@@ -3,7 +3,6 @@ package sudoku;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * A Worker Thread
@@ -21,12 +20,14 @@ public class ThreadSlave extends Thread {
 
     @Override
     public void run() {
-        
+        backtrack();
     }
     
-    public boolean backtrack(){
+    public void backtrack(){
         
-        if(work.isEntirelyFilled() && work.)
+        if(work.isCorrectlyFilled())
+            return;
+        else if(!work.isEntirelyFilled()){
         ArrayList<Point> emptyCells = work.getEmptyCells();
         Iterator<Point> it = emptyCells.iterator();
         while(it.hasNext()){
@@ -41,6 +42,7 @@ public class ThreadSlave extends Thread {
                work.setCell(iCurrent, jCurrent, (byte)0);
            }
         }
-        return false;
     }
+   }
 }
+    

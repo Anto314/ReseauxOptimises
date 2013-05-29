@@ -31,6 +31,8 @@ public class Main
         try
         {
             grid = new Grid(args[0]);
+            ThreadMaster tm = new ThreadMaster("Master", grid);
+            tm.start();
         }
         catch (FileNotFoundException exception)
         {
