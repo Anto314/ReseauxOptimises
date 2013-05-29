@@ -70,7 +70,8 @@ public class Grid
         _height = grid._height;
         _numbersCount = grid._numbersCount;
         _squaresCount = grid._squaresCount;
-        
+        _cells = new byte[_width][_height];
+        _lastGridCells = new byte[_width][_height];
         for (int row = 0; row < grid._height; row++)
         {
             for (int column = 0; column < grid._width; column++)
@@ -256,7 +257,7 @@ public class Grid
      */
     public boolean isCorrectlyFilled()
     {
-        boolean isNumberFound[] = new boolean[_numbersCount];
+        boolean isNumberFound[] = new boolean[_numbersCount+1];
         
         // Check each row to find one and only one instance of each number
         for (int row = 0; row < _height; row++)

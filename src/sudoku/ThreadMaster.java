@@ -68,6 +68,7 @@ public class ThreadMaster extends Thread{
     }
     @Override
     public void run(){
+        prepare();
         System.out.println(getName());
         ThreadSlave slaves[] = new ThreadSlave[maxSlave];
         int cpt = 0;
