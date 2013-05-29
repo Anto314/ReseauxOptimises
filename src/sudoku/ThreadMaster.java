@@ -69,12 +69,22 @@ public class ThreadMaster extends Thread{
     @Override
     public void run(){
         System.out.println(getName());
+        prepare();
         ThreadSlave slaves[] = new ThreadSlave[maxSlave];
         int cpt = 0;
         Iterator<Byte> it = maximalPossibility.iterator();
         while(it.hasNext()){
             byte current = it.next();
-            
+           Grid slaveGrid = new Grid(grid);
+           slaveGrid.setCell(iMax, jMax, current);
+           slaves[cpt] = new ThreadSlave(cpt, slaveGrid);
+           slaves[cpt].start();
+            try {
+                slaves[cpt].join();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ThreadMaster.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                   cpt++;
         }
         System.out.println("Finish");
     }

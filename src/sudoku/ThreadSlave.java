@@ -5,13 +5,14 @@ package sudoku;
  */
 public class ThreadSlave extends Thread{
     
-    
-    public ThreadSlave(int threadNumber){
+    Grid work;
+    public ThreadSlave(int threadNumber,Grid work){
         this.setName("Slave"+Integer.toString(threadNumber));
+        this.work = work;
     }
     
     @Override
     public void run(){
-        System.out.println(getName());
+        
     }
 }
