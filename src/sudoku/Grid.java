@@ -139,7 +139,7 @@ public class Grid {
         
         for(int k =0;k<_width;k++){
             if(!figureRow[k] && !figureColumn[k])
-                possibleNumber.add(new Byte((byte)k));
+                possibleNumber.add(new Byte((byte)(k+1)));
         }
         return possibleNumber;
     }
