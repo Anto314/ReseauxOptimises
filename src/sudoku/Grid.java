@@ -1,7 +1,8 @@
 package sudoku;
 
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.util.Scanner;
 
 /** A sudoku grid.
  * @author Antoine MOISE and Adrien RICCIARDI
@@ -15,29 +16,44 @@ public class Grid
     /** Height of the grid in cells. */
     private int _height = 9;
     
-    /** Grid used by showDifference() function. */
-    private Grid _lastGrid;
+    /** Used by showDifference() to store the last shown grid. */
+    private byte _lastGridCells[][];
     
     /** Create a new grid from a file.
      * @param fileName Name of the file describing the grid.
      */
     public Grid(String fileName) throws FileNotFoundException
     {
-        FileReader fileReader = new FileReader(fileName);
-                
+        Scanner scanner = new Scanner(new File(fileName));
         
-        // Read the file content
-       /* for (int row = 0; row < HEIGHT; row++)
+        /** @todo : for now we use a fixed grid size */
+        _width = 9;
+        _height = 9;
+        
+        // Create grids
+        _cells = new byte[_width][_height];
+        _lastGridCells = new byte[_width][_height];
+        
+        // Read content from file
+        for (int row = 0; row < _height; row++)
         {
-            for (int column = 0; column < WIDTH; column++)
+            for (int column = 0; column < _width; column++)
             {
-                
+                byte cellValue;
+                try
+                {
+                     cellValue = (byte) scanner.nextInt();
+                }
+                catch (Exception exception)
+                {
+                    throw new RuntimeException("Bad grid file format. " + exception.getMessage());
+                }
+                        
+                _cells[row][column] = cellValue;
+                _lastGridCells[row][column] = cellValue;
             }
-        }*/
-        
+        }       
     }
-    
-    public Grid() {_width = 9; _height = 9; _cells = new byte [9][9];}
     
     /** Display grid content to the console */
     public void show()
