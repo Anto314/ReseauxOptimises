@@ -6,6 +6,7 @@ import java.io.FileReader;
 /** A sudoku grid.
  * @author Antoine MOISE and Adrien RICCIARDI
  */
+/** Small Test for commit */
 public class Grid
 {
     /** Hold the cells content. */
