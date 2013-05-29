@@ -1,7 +1,6 @@
 package sudoku;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -154,12 +153,15 @@ public class Grid
             if (cellValue != 0) existingNumbers[cellValue] = true;
         }
         
-        // Find in what square the cell is located
-        int squareRowLimit = (row / _squaresCount) + _squaresCount; // Cache loops limit to avoid recalculating them every time
-        int squareColumnLimit = (column /_squaresCount) + _squaresCount;
-        for (int squareRow = row / _squaresCount; squareRow < squareRowLimit; squareRow++)
+        // Find square bounds in which the cell is located
+        int squareRowStart = row / _squaresCount;
+        int squareRowEnd = (row / _squaresCount) + _squaresCount;
+        int squareColumnStart = column / _squaresCount;
+        int squareColumnEnd = (column /_squaresCount) + _squaresCount;
+        
+        for (int squareRow = squareRowStart; squareRow < squareRowEnd; squareRow++)
         {
-            for (int squareColumn = column / _squaresCount; squareColumn < squareColumnLimit; squareColumn++)
+            for (int squareColumn = squareColumnStart; squareColumn < squareColumnEnd; squareColumn++)
             {
                 byte cellValue = _cells[squareRow][squareColumn];
                 if (cellValue != 0) existingNumbers[cellValue] = true;
@@ -252,7 +254,7 @@ public class Grid
      * This function does not care about empty cells.
      * @return true if the grid is correctly filled or false if there is a mistake.
      */
-   /* public boolean isCorrectlyFilled()
+    public boolean isCorrectlyFilled()
     {
         boolean isNumberFound[] = new boolean[_numbersCount];
         
@@ -287,7 +289,33 @@ public class Grid
         }
         
         // Check each square to find one and only one instance of each number
-    }*/
+        for (int squareRow = 0; squareRow < _squaresCount; squareRow++)
+        {
+            for (int squareColumn = 0; squareColumn < _squaresCount; squareColumn++)
+            {
+                // Reset array
+                for (int i = 0; i < isNumberFound.length; i++) isNumberFound[i] = false;
+                
+                // Check square row after row
+                int rowStart = squareRow * _squaresCount;
+                int rowEnd = (squareRow * _squaresCount) + _squaresCount;
+                int columnStart = squareColumn * _squaresCount;
+                int columnEnd = (squareColumn * _squaresCount) + _squaresCount;
+                
+                for (int row = rowStart; row < rowEnd; row++)
+                {
+                    for (int column = columnStart; column < columnEnd; column++)
+                    {
+                        byte cellValue = _cells[row][column];
+                        if (cellValue == 0) continue; // Avoid empty cells
+                        if (isNumberFound[cellValue]) return false;
+                        isNumberFound[cellValue] = true;
+                    }
+                }
+            }
+        }
+        return true;
+    }
     
     /** Get all empty cells of the grid.
      * @return A list of points (x = column; y = row) representing all empty cells.
