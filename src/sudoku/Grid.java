@@ -2,6 +2,7 @@ package sudoku;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /** A sudoku grid.
@@ -12,9 +13,13 @@ public class Grid
     /** Hold the cells content. */
     private byte _cells[][];
     /** Width of the grid in cells. */
-    private int _width = 9;
+    private int _width;
     /** Height of the grid in cells. */
-    private int _height = 9;
+    private int _height;
+    /** How many numbers are used by the grid. */
+    private int _numbersCount;
+    /** How many squares are represented in the grid. */
+    private int _squaresCount;
     
     /** Used by showDifference() to store the last shown grid. */
     private byte _lastGridCells[][];
@@ -29,6 +34,8 @@ public class Grid
         /** @todo : for now we use a fixed grid size */
         _width = 9;
         _height = 9;
+        _numbersCount = _width;
+        _squaresCount = 3;
         
         // Create grids
         _cells = new byte[_width][_height];
@@ -52,8 +59,6 @@ public class Grid
                 _cells[row][column] = cellValue;
                 _lastGridCells[row][column] = cellValue;
             }
-            
-                _cells[3][5] = 8;
         }       
     }
     
@@ -100,5 +105,53 @@ public class Grid
             System.out.println();
         }
         System.out.println();
+    }
+    
+    /** Get a list of the allowed missing numbers for a specified cell.
+     * @param row Cell row coordinate.
+     * @param column Cell column coordinate.
+     * @return The allowed numbers for this cell.
+     */
+    public ArrayList<Byte> getCellMissingNumbers(int row, int column)
+    {
+        // Be sure that the requested cell is empty
+        assert _cells[row][column] == 0;
+        
+        // Tell if a number is existing or not at the end of the process
+        boolean existingNumbers[] = new boolean[_numbersCount + 1];
+                    
+        // List existing numbers on the cell row
+        for (int i = 0; i < _width; i++)
+        {
+            byte cellValue = _cells[row][i];
+            if (cellValue != 0) existingNumbers[cellValue] = true;
+        }
+        
+        // List existing numbers on the cell column (it's done separately from cell row in case of different grid width and height)
+        for (int i = 0; i < _height; i++)
+        {
+            byte cellValue = _cells[i][column];
+            if (cellValue != 0) existingNumbers[cellValue] = true;
+        }
+        
+        // Find in what square the cell is located
+        int squareRowLimit = (row / _squaresCount) + _squaresCount; // Cache loops limit to avoid recalculating them every time
+        int squareColumnLimit = (column /_squaresCount) + _squaresCount;
+        for (int squareRow = row / _squaresCount; squareRow < squareRowLimit; squareRow++)
+        {
+            for (int squareColumn = column / _squaresCount; squareColumn < squareColumnLimit; squareColumn++)
+            {
+                byte cellValue = _cells[squareRow][squareColumn];
+                if (cellValue != 0) existingNumbers[cellValue] = true;
+            }
+        }        
+        
+        // Fill list with missing numbers
+        ArrayList<Byte> result = new ArrayList<Byte>();
+        for (byte i = 1; i < existingNumbers.length; i++)
+        {
+            if (!existingNumbers[i]) result.add(i);
+        }
+        return result;
     }
 }

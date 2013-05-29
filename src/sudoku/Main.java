@@ -9,6 +9,15 @@ public class Main
 {
     public static void main(String args[])
     {
+        // Assertions must be enabled
+        try
+        {
+            assert false;
+            System.out.println("Error : assertions must be enabled (add -ea to java command line).");
+            return;
+        }
+        catch (AssertionError error) {}
+                
         // Check parameters
         if (args.length != 1)
         {
@@ -29,10 +38,11 @@ public class Main
             return;
         }
         
+        
+        
                 // TEST
                 grid.showDifferences();
-                grid.showDifferences();
-        
-        
+                
+                System.out.println(grid.getCellMissingNumbers(0, 3));
     }
 }
