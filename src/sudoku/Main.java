@@ -31,6 +31,7 @@ public class Main
         try
         {
             grid = new Grid(args[0]);
+            grid.show();
             ThreadMaster tm = new ThreadMaster("Master", grid);
             tm.start();
         }

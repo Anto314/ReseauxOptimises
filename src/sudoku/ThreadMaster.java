@@ -72,7 +72,9 @@ public class ThreadMaster extends Thread{
         System.out.println(getName());
         ThreadSlave slaves[] = new ThreadSlave[maxSlave];
         int cpt = 0;
+        System.out.println("iMax = "+iMax+"jMax = "+jMax);
         Iterator<Byte> it = maximalPossibility.iterator();
+        System.out.println("Taille = "+maximalPossibility.size());
         while(it.hasNext()){
             byte current = it.next();
            Grid slaveGrid = new Grid(grid);
@@ -84,6 +86,7 @@ public class ThreadMaster extends Thread{
             } catch (InterruptedException ex) {
                 Logger.getLogger(ThreadMaster.class.getName()).log(Level.SEVERE, null, ex);
             }
+            cpt++;
         }
         System.out.println("Finish");
     }
