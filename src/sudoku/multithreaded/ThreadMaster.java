@@ -1,10 +1,11 @@
 
-package sudoku;
+package sudoku.multithreaded;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sudoku.Grid;
 
 /** A thread which give work to ThreadSlave
  * @author Antoine MOISE and Adrien RICCIARDI
@@ -75,7 +76,7 @@ public class ThreadMaster extends Thread{
         while(it.hasNext()){
             byte current = it.next();
            Grid slaveGrid = new Grid(grid);
-           slaveGrid.setCell(iMax, jMax, current);
+           slaveGrid.setCellValue(iMax, jMax, current);
            slaves[cpt] = new ThreadSlave(cpt, slaveGrid);
            slaves[cpt].start();
             try {
@@ -110,7 +111,7 @@ public class ThreadMaster extends Thread{
     }*/
     
     public void prepare(){
-        int maxPossibility = -1;
+       /* int maxPossibility = -1;
         int width = grid.getWidth();
         int height = grid.getHeight();
         
@@ -129,6 +130,6 @@ public class ThreadMaster extends Thread{
                 }
             }
         }
-        maxSlave = maxPossibility;
+        maxSlave = maxPossibility;*/
     }
 }

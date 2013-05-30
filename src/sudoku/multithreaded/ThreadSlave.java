@@ -1,8 +1,9 @@
-package sudoku;
+package sudoku.multithreaded;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
+import sudoku.Grid;
 
 /**
  * A Worker Thread
@@ -25,7 +26,7 @@ public class ThreadSlave extends Thread {
     
     public void backtrack(){
         
-        if(work.isCorrectlyFilled())
+      /*  if(work.isCorrectlyFilled())
             return;
         else if(!work.isEntirelyFilled()){
         ArrayList<Point> emptyCells = work.getEmptyCells();
@@ -42,7 +43,7 @@ public class ThreadSlave extends Thread {
                work.setCell(iCurrent, jCurrent, (byte)0);
            }
         }
-    }
+    }*/
    }
 }
     

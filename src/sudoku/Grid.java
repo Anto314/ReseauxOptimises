@@ -13,17 +13,18 @@ public class Grid
 {
     /** Hold the cells content. */
     private byte _cells[][];
-    /** Width of the grid in cells. */
-    private int _width;
-    /** Height of the grid in cells. */
-    private int _height;
-    /** How many numbers are used by the grid. */
-    private int _numbersCount;
-    /** How many squares are represented in the grid. */
-    private int _squaresCount;
+    /** Size of the grid in cells. */
+    private int _gridSize;
+    /** Width of a square in cells. */
+    private int _squareWidth;
+    /** Height of a square in cells. */
+    private int _squareHeight;
     
     /** Used by showDifference() to store the last shown grid. */
     private byte _lastGridCells[][];
+    
+    /** An empty cell is represented by this value. */
+    public static final byte EMPTY_CELL_VALUE = 0;
     
     /** Create a new grid from a file.
      * @param fileName Name of the file describing the grid.
@@ -32,20 +33,19 @@ public class Grid
     {
         Scanner scanner = new Scanner(new File(fileName));
         
-        /** @todo : for now we use a fixed grid size */
-        _width = 9;
-        _height = 9;
-        _numbersCount = _width;
-        _squaresCount = 3;
+        // Retrieve grid parameters
+        _gridSize = scanner.nextInt();
+        _squareWidth = scanner.nextInt();
+        _squareHeight = scanner.nextInt();
         
         // Create grids
-        _cells = new byte[_width][_height];
-        _lastGridCells = new byte[_width][_height];
+        _cells = new byte[_gridSize][_gridSize];
+        _lastGridCells = new byte[_gridSize][_gridSize];
         
         // Read content from file
-        for (int row = 0; row < _height; row++)
+        for (int row = 0; row < _gridSize; row++)
         {
-            for (int column = 0; column < _width; column++)
+            for (int column = 0; column < _gridSize; column++)
             {
                 byte cellValue;
                 try
@@ -60,20 +60,22 @@ public class Grid
                 _cells[row][column] = cellValue;
                 _lastGridCells[row][column] = cellValue;
             }
-        }       
+        }
+        scanner.close();
     }
     
-    /** Create a new grid filled with the content of another. */
+    /** Create a new grid filled with the content of another.
+     * @param grid The grid to copy content from.
+     */
     public Grid(Grid grid)
     {
-        _width = grid._width;
-        _height = grid._height;
-        _numbersCount = grid._numbersCount;
-        _squaresCount = grid._squaresCount;
-        
-        for (int row = 0; row < grid._height; row++)
+        _gridSize = grid._gridSize;
+        _squareWidth = grid._squareWidth;
+        _squareHeight = grid._squareHeight;
+                
+        for (int row = 0; row < _gridSize; row++)
         {
-            for (int column = 0; column < grid._width; column++)
+            for (int column = 0; column < _gridSize; column++)
             {
                 _cells[row][column] = grid._cells[row][column];
                 _lastGridCells[row][column] = grid._lastGridCells[row][column];
@@ -84,11 +86,11 @@ public class Grid
     /** Display grid content to the console. */
     public void show()
     {
-        for (int row = 0; row < _height; row++)
+        for (int row = 0; row < _gridSize; row++)
         {
-            for (int column = 0; column < _width; column++)
+            for (int column = 0; column < _gridSize; column++)
             {
-                if (_cells[row][column] == 0) System.out.print(". ");
+                if (_cells[row][column] == EMPTY_CELL_VALUE) System.out.print(". ");
                 else System.out.print(_cells[row][column] + " ");
             }
             System.out.println();
@@ -99,9 +101,9 @@ public class Grid
     /** Display the grid and colorize changes between the current grid and the last call of this function. */
     public void showDifferences()
     {
-        for (int row = 0; row < _height; row++)
+        for (int row = 0; row < _gridSize; row++)
         {
-            for (int column = 0; column < _width; column++)
+            for (int column = 0; column < _gridSize; column++)
             {
                 // Check if there is a difference between this last cell and current cell
                 boolean hasColorChanged = false;
@@ -112,7 +114,7 @@ public class Grid
                 }
                 
                 // Show value
-                if (_cells[row][column] == 0) System.out.print(". ");
+                if (_cells[row][column] == EMPTY_CELL_VALUE) System.out.print(". ");
                 else System.out.print(_cells[row][column] + " ");
                 
                 // Restore color if needed
@@ -131,67 +133,67 @@ public class Grid
      * @param column Cell column coordinate.
      * @return The allowed numbers for this cell or null if the cell is not empty.
      */
-    public ArrayList<Byte> getPossibleNumberAt(int row, int column)
+    public ArrayList<Byte> getCellMissingNumbers(int row, int column)
     {
         // Check if the cell is empty
-        if (_cells[row][column] != 0) return null;
+        if (_cells[row][column] != EMPTY_CELL_VALUE) return null;
         
         // Tell if a number is existing or not at the end of the process
-        boolean existingNumbers[] = new boolean[_numbersCount + 1];
+        boolean existingNumbers[] = new boolean[_gridSize + 1]; // The +1 is needed because the numbers we search are 1-based
                     
         // List existing numbers on the cell row
-        for (int i = 0; i < _width; i++)
+        for (int i = 0; i < _gridSize; i++)
         {
             byte cellValue = _cells[row][i];
-            if (cellValue != 0) existingNumbers[cellValue] = true;
+            existingNumbers[cellValue] = true;
         }
         
         // List existing numbers on the cell column (it's done separately from cell row in case of different grid width and height)
-        for (int i = 0; i < _height; i++)
+        for (int i = 0; i < _gridSize; i++)
         {
             byte cellValue = _cells[i][column];
-            if (cellValue != 0) existingNumbers[cellValue] = true;
+            existingNumbers[cellValue] = true;
         }
         
         // Find square bounds in which the cell is located
-        int squareRowStart = row / _squaresCount;
-        int squareRowEnd = (row / _squaresCount) + _squaresCount;
-        int squareColumnStart = column / _squaresCount;
-        int squareColumnEnd = (column /_squaresCount) + _squaresCount;
+        int squareRowStart = (row / _squareHeight) * _squareHeight; // Do an euclidian division
+        int squareColumnStart = (column / _squareWidth) * _squareWidth;
+        int squareRowEnd = squareRowStart + _squareHeight;
+        int squareColumnEnd = squareColumnStart + _squareWidth;
         
         for (int squareRow = squareRowStart; squareRow < squareRowEnd; squareRow++)
         {
             for (int squareColumn = squareColumnStart; squareColumn < squareColumnEnd; squareColumn++)
             {
                 byte cellValue = _cells[squareRow][squareColumn];
-                if (cellValue != 0) existingNumbers[cellValue] = true;
+                existingNumbers[cellValue] = true;
             }
         }        
         
         // Fill list with missing numbers
         ArrayList<Byte> result = new ArrayList<Byte>();
-        for (byte i = 1; i < existingNumbers.length; i++)
+        for (byte i = 1; i < existingNumbers.length; i++) // numbers in the grid are 1-based so we start with 1
         {
             if (!existingNumbers[i]) result.add(i);
         }
         return result;
     }
     
-    /** Get the width of the grid.
-     * @return The grid width.
+    /** Get the size of the grid.
+     * @return The grid size.
      */
-    public int getWidth()
+   /* public int getSize()
     {
         return _width;
-    }
+    }*/
     
     /** Get the height of the grid.
      * @return The grid height.
      */
-    public int getHeight()
+ /*   public int getHeight()
     {
         return _height;
-    }
+    }*/
     
     /**
      * Compute figure that can be put at cass (i,j) according to Sudoku rule
@@ -221,32 +223,17 @@ public class Grid
         return possibleNumber;
     }*/
     
-    /** Tell if all cells are filled in or not.
-     * @return true if all cells are filled or false if not.
-     */
-    public boolean isEntirelyFilled()
-    {
-        for (int row = 0; row < _height; row++)
-        {
-            for (int column = 0; column < _width; column++)
-            {
-                if (_cells[row][column] == 0) return false;
-            }
-        }
-        return true;
-    }
-    
     /** Set a cell value.
      * @param row Cell row coordinate.
      * @param column Cell column coordinate.
      * @param value Cell value.
      */
-    public void setCell(int row, int column, byte value)
+    public void setCellValue(int row, int column, byte value)
     {
-        assert row > 0;
-        assert row < _height;
-        assert column > 0;
-        assert column < _width;
+        assert row >= 0;
+        assert row < _gridSize;
+        assert column >= 0;
+        assert column < _gridSize;
         _cells[row][column] = value;
     }
     
@@ -256,58 +243,59 @@ public class Grid
      */
     public boolean isCorrectlyFilled()
     {
-        boolean isNumberFound[] = new boolean[_numbersCount];
+        boolean isNumberFound[] = new boolean[_gridSize + 1]; // Grid numbers are 1-based
         
         // Check each row to find one and only one instance of each number
-        for (int row = 0; row < _height; row++)
+        for (int row = 0; row < _gridSize; row++)
         {
             // Reset array
             for (int i = 0; i < isNumberFound.length; i++) isNumberFound[i] = false;
             
-            for (int column = 0; column < _width; column++)
+            for (int column = 0; column < _gridSize; column++)
             {
                 byte cellValue = _cells[row][column];
-                if (cellValue == 0) continue; // Avoid empty cells
+                if (cellValue == EMPTY_CELL_VALUE) continue; // Avoid empty cells
                 if (isNumberFound[cellValue]) return false;
                 isNumberFound[cellValue] = true;
             }
         }
         
         // Check each column to find one and only one instance of each number
-        for (int column = 0; column < _width; column++)
+        for (int column = 0; column < _gridSize; column++)
         {
             // Reset array
             for (int i = 0; i < isNumberFound.length; i++) isNumberFound[i] = false;
             
-            for (int row = 0; row < _height; row++)
+            for (int row = 0; row < _gridSize; row++)
             {
                 byte cellValue = _cells[row][column];
-                if (cellValue == 0) continue; // Avoid empty cells
+                if (cellValue == EMPTY_CELL_VALUE) continue; // Avoid empty cells
                 if (isNumberFound[cellValue]) return false;
                 isNumberFound[cellValue] = true;
             }
         }
         
         // Check each square to find one and only one instance of each number
-        for (int squareRow = 0; squareRow < _squaresCount; squareRow++)
+        for (int row = 0; row < _gridSize; row++)
         {
-            for (int squareColumn = 0; squareColumn < _squaresCount; squareColumn++)
+            for (int column = 0; column < _gridSize; column++)
             {
                 // Reset array
                 for (int i = 0; i < isNumberFound.length; i++) isNumberFound[i] = false;
                 
-                // Check square row after row
-                int rowStart = squareRow * _squaresCount;
-                int rowEnd = (squareRow * _squaresCount) + _squaresCount;
-                int columnStart = squareColumn * _squaresCount;
-                int columnEnd = (squareColumn * _squaresCount) + _squaresCount;
+                // Find square bounds in which the cell is located
+                int squareRowStart = (row / _squareHeight) * _squareHeight; // Do an euclidian division
+                int squareColumnStart = (column / _squareWidth) * _squareWidth;
+                int squareRowEnd = squareRowStart + _squareHeight;
+                int squareColumnEnd = squareColumnStart + _squareWidth;
                 
-                for (int row = rowStart; row < rowEnd; row++)
+                // Find numbers present into the square
+                for (int squareRow = squareRowStart; squareRow < squareRowEnd; squareRow++)
                 {
-                    for (int column = columnStart; column < columnEnd; column++)
+                    for (int squareColumn = squareColumnStart; squareColumn < squareColumnEnd; squareColumn++)
                     {
-                        byte cellValue = _cells[row][column];
-                        if (cellValue == 0) continue; // Avoid empty cells
+                        byte cellValue = _cells[squareRow][squareColumn];
+                        if (cellValue == EMPTY_CELL_VALUE) continue; // Avoid empty cells
                         if (isNumberFound[cellValue]) return false;
                         isNumberFound[cellValue] = true;
                     }
@@ -320,17 +308,32 @@ public class Grid
     /** Get all empty cells of the grid.
      * @return A list of points (x = column; y = row) representing all empty cells.
      */
-    public ArrayList<Point> getEmptyCells()
+    /*public ArrayList<Point> getEmptyCells()
     {
         ArrayList<Point> result = new ArrayList<Point>();
         
-        for (int row = 0; row < _height; row++)
+        for (int row = 0; row < _gridSize; row++)
         {
-            for (int column = 0; column < _width; column++)
+            for (int column = 0; column < _gridSize; column++)
             {
                 if (_cells[row][column] == 0) result.add(new Point(column, row));
             }
         }
         return result;
+    }*/
+    
+    /** Retrive the coordinates of the first empty cell.
+     * @return null if all grid cells are filled or the coordinates (x = column; y = row) of the first empty cell.
+     */
+    public Point getFirstEmptyCell()
+    {
+        for (int row = 0; row < _gridSize; row++)
+        {
+            for (int column = 0; column < _gridSize; column++)
+            {
+                if (_cells[row][column] == EMPTY_CELL_VALUE) return new Point(column, row);
+            }
+        }
+        return null; // All cells are filled in
     }
 }
