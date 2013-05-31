@@ -86,9 +86,10 @@ public class ThreadMaster extends Thread{
    
     @Override
     public void run(){
+        int cpt = 0;
+        prepare();
         System.out.println(getName());
         slaves = new ThreadSlave[maxSlave];
-        int cpt = 0;
         Iterator<Byte> it = maximalPossibility.iterator();
         while(it.hasNext()){
             byte current = it.next();
@@ -110,29 +111,25 @@ public class ThreadMaster extends Thread{
         System.out.println("Finish");
     }
     
-   /* public void prepare(){
+   public void prepare(){
         
         int maxPossibility = -1;
-        ArrayList<Byte> a;
-        int length = grid.getWidth();
-        byte cells[][] = grid.getCells();
+        ArrayList<Byte> numbers;
+        int length = grid.getGridSize();
                 
         for(int i =0;i<length;i++)
-            for(int j =0;i<length;j++)
-              if(cells[i][j]==-1)
-              {
-                  a = grid.getPossibleNumberAt(i, j);
-                  if(a.size()>maxPossibility){
-                      maximalPossibility = a;
-                      maxPossibility = a.size();
+            for(int j =0;i<length;j++){
+                  numbers = grid.getCellMissingNumbers(i, j);
+                  if(numbers.size()>maxPossibility){
+                      
+                      maximalPossibility = numbers;
+                      maxPossibility = numbers.size();
                       iMax = i;
                       jMax = j;
                   }
               }
         maxSlave = maxPossibility;
-    }*/
-    
-    public void prepare(){
-       // TODO
     }
+    
+    
 }

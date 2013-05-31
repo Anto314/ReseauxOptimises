@@ -15,6 +15,14 @@ public class Grid
     private byte _cells[][];
     /** Size of the grid in cells. */
     private int _gridSize;
+
+    public int getGridSize() {
+        return _gridSize;
+    }
+
+    public void setGridSize(int _gridSize) {
+        this._gridSize = _gridSize;
+    }
     /** Width of a square in cells. */
     private int _squareWidth;
     /** Height of a square in cells. */
@@ -179,21 +187,7 @@ public class Grid
         return result;
     }
     
-    /** Get the size of the grid.
-     * @return The grid size.
-     */
-   /* public int getSize()
-    {
-        return _width;
-    }*/
     
-    /** Get the height of the grid.
-     * @return The grid height.
-     */
- /*   public int getHeight()
-    {
-        return _height;
-    }*/
     
     /** Set a cell value.
      * @param row Cell row coordinate.
