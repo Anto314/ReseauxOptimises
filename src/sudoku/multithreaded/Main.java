@@ -1,7 +1,6 @@
 package sudoku.multithreaded;
 
 import java.io.FileNotFoundException;
-import sudoku.Backtrack;
 import sudoku.Grid;
 
 /** Initialize program and start solving job.
@@ -9,8 +8,6 @@ import sudoku.Grid;
  */
 public class Main 
 {
-    /** Set to true to turn on debug stuff. */
-    public static final boolean DEBUG = false;
     
     public static void main(String args[])
     {

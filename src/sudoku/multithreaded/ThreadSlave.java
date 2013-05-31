@@ -44,14 +44,8 @@ public class ThreadSlave extends Thread
     @Override
     public void run() 
     {
-        if (Main.DEBUG) System.out.println(getName());
-        
         // Only the thread which found the solution can tell the master
-        if (_backtrack.solve())
-        {
-            if (Main.DEBUG) System.out.println("Correct solution found by " + getName());
-            ThreadMaster.notifySolutionFound(_backtrack.getGrid(), _backtrack.getLoopsCount());
-        }
+        if (_backtrack.solve()) ThreadMaster.notifySolutionFound(_backtrack.getGrid(), _backtrack.getLoopsCount());
     }
 }
     

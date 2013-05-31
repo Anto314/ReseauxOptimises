@@ -100,7 +100,7 @@ public class ThreadMaster extends Thread{
     public void run(){
         int cpt = 0;
         prepare();
-        if (Main.DEBUG) System.out.println(getName());
+        // System.out.println(getName());
         slaves = new ThreadSlave[maxSlave];
         Iterator<Byte> it = maximalPossibility.iterator();
         while(it.hasNext()){
@@ -141,7 +141,5 @@ public class ThreadMaster extends Thread{
                   }
               }
         maxSlave = maxPossibility;
-    }
-    
-    
+    }   
 }
