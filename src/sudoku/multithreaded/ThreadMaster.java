@@ -71,7 +71,7 @@ public class ThreadMaster extends Thread{
     public static void notifySolutionFound(Grid foundGrid, long loopsCount)
     {
         System.out.println("Correct Grid Found");
-        System.out.println("Number of loop");
+        System.out.println("Number of loop : "+loopsCount);
         foundGrid.show();
         
         //Kill all remaining Threads
@@ -102,7 +102,6 @@ public class ThreadMaster extends Thread{
         }
         for(int i =0;i<maxSlave;i++){
             slaves[i].start();
-            System.out.println("i = "+i);
         }
             try {
                 for(int i = 0;i<maxSlave;i++){
