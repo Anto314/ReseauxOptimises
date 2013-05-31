@@ -120,7 +120,7 @@ public class ThreadMaster extends Thread{
         for(int i =0;i<length;i++)
             for(int j =0;i<length;j++){
                   numbers = grid.getCellMissingNumbers(i, j);
-                  if(numbers.size()>maxPossibility){
+                  if(numbers!=null && numbers.size()>maxPossibility){
                       
                       maximalPossibility = numbers;
                       maxPossibility = numbers.size();
