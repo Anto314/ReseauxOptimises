@@ -51,49 +51,16 @@ public class Main
         // Show grid to solve
         grid.show();
         
-            // TEST
-            ThreadSlave slave = new ThreadSlave(0, grid);
-            slave.start();
-            
-            try
-            {
-                Thread.sleep(4);
-            }
-            catch (InterruptedException e) {}
-            slave.interrupt();
-            
-            try
-            {
-                slave.join();
-            }
-            catch (InterruptedException e) {}
-             
-            if (slave.isGridSolved())
-            {
-                System.out.println("Grid successfully solved in " + slave.getLoopsCount() + " loops.");
-                slave.getGrid().show();
-                System.exit(0); // Useful for tests to indicate a solving success
-            }
-            else
-            {
-                System.out.println("Failure : can't solve this grid.");
-                System.out.println("Found grid :");
-                slave.getGrid().show();
-                System.exit(-1);
-            }   
-        
-        
         // Start solving
-        /*ThreadMaster tm = new ThreadMaster("Master", grid);
+        ThreadMaster tm = new ThreadMaster("Master", grid);
         tm.start();
         
-            // TEST
-            // Wait for master end
-            try
-            {
-                tm.join();
-            }
-            catch (InterruptedException e) {}*/
+        // Wait for master end
+        try
+        {
+            tm.join();
+        }
+        catch (InterruptedException e) {}
         
         /*Backtrack backtrack = new Backtrack(grid);
         if (backtrack.solve())

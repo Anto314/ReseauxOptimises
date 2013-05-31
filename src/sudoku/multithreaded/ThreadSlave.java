@@ -28,47 +28,49 @@ public class ThreadSlave extends Thread {
         }
     }
 
-    private Grid work;
+   // private Grid work;
     
     /** The backtrack solving job done by this thread. */
     private Backtrack _backtrack;
     /** Tell if the thread has found the solution or not. */
-    private boolean _isGridSolved;
+   // private boolean _isGridSolved;
     
     public ThreadSlave(int threadNumber, Grid work) {
         this.setName("Slave" + Integer.toString(threadNumber));
-        this.work = work;
+        //this.work = work;
         _backtrack = new BacktrackInterruptible(work);
     }
 
     @Override
     public void run() {
-        _isGridSolved = _backtrack.solve();
+        //_isGridSolved = _backtrack.solve();
+        // Only the thread which found the solution can tell the master
+        if (_backtrack.solve()) ThreadMaster.notifySolutionFound(_backtrack.getGrid(), _backtrack.getLoopsCount());
     }
     
     /** Tell if the thread has found or not the solution.
      * This function must be called when the thread terminated.
      * @return true if the solution was found or false if not.
      */
-    public boolean isGridSolved()
+   /* public boolean isGridSolved()
     {
         return _isGridSolved;
-    }
+    }*/
     
     /** Get the thread working grid.
      * @return The grid.
      */
-    public Grid getGrid()
+  /*  public Grid getGrid()
     {
         return work;
-    }
+    }*/
     
     /** How many loops were necessaty to solve the grid.
      * @return The loops count.
      */
-    public long getLoopsCount()
+ /*   public long getLoopsCount()
     {
         return _backtrack.getLoopsCount();
-    }
+    }*/
 }
     
