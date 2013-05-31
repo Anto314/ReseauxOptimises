@@ -99,8 +99,8 @@ public class Grid
         {
             for (int column = 0; column < _gridSize; column++)
             {
-                if (_cells[row][column] == EMPTY_CELL_VALUE) System.out.print(". ");
-                else System.out.print(_cells[row][column] + " ");
+                if (_cells[row][column] == EMPTY_CELL_VALUE) System.out.print(" . ");
+                else System.out.printf("%2d ", _cells[row][column]);
             }
             System.out.println();
         }
@@ -124,7 +124,7 @@ public class Grid
                 
                 // Show value
                 if (_cells[row][column] == EMPTY_CELL_VALUE) System.out.print(". ");
-                else System.out.print(_cells[row][column] + " ");
+                else System.out.printf("%2d ", _cells[row][column]);
                 
                 // Restore color if needed
                 if (hasColorChanged) System.out.print("\u001B[0m");
