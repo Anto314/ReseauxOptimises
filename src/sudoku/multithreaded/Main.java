@@ -57,6 +57,13 @@ public class Main
             
             try
             {
+                Thread.sleep(4);
+            }
+            catch (InterruptedException e) {}
+            slave.interrupt();
+            
+            try
+            {
                 slave.join();
             }
             catch (InterruptedException e) {}

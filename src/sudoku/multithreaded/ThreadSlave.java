@@ -12,6 +12,24 @@ import sudoku.Grid;
  * @author Antoine MOISE and Adrien RICCIARDI
  */
 public class ThreadSlave extends Thread {
+    /** This the same version than the monothreaded backtrack except that it can be interrupted at any time. */
+    private class BacktrackInterruptible extends Backtrack
+    {
+        /** Create a new interruptible backtrack solving algorithm.
+         * @param grid The grid to solve.
+         */
+        public BacktrackInterruptible(Grid grid)
+        {
+            super(grid);
+        }
+        
+        @Override
+        public boolean solve()
+        {
+            if (interrupted()) return true;
+            return super.solve();
+        }
+    }
 
     private Grid work;
     
@@ -23,7 +41,7 @@ public class ThreadSlave extends Thread {
     public ThreadSlave(int threadNumber, Grid work) {
         this.setName("Slave" + Integer.toString(threadNumber));
         this.work = work;
-        _backtrack = new Backtrack(work);
+        _backtrack = new BacktrackInterruptible(work);
     }
 
     @Override
@@ -49,6 +67,9 @@ public class ThreadSlave extends Thread {
         return work;
     }
     
+    /** How many loops were necessaty to solve the grid.
+     * @return The loops count.
+     */
     public long getLoopsCount()
     {
         return _backtrack.getLoopsCount();
