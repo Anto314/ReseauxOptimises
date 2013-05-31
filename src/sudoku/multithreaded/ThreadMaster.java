@@ -30,7 +30,7 @@ public class ThreadMaster extends Thread{
     /**
      * Maximal number of slave which could be created
      */
-    private int maxSlave;
+    private static int maxSlave;
 
     /**
      * Sudoku grid
@@ -38,6 +38,10 @@ public class ThreadMaster extends Thread{
     Grid grid;
     
     /**
+     * all ThreadSlave handled by the ThreadMaster
+     */
+    private static ThreadSlave slaves[];
+     /**
      * Create a new ThreadMaster
      * @param name name given to this Thread
      * @param grid sudoku grid
@@ -59,18 +63,31 @@ public class ThreadMaster extends Thread{
         this.grid = grid;
     }
     
+    /**
+     * Commentaire à mettre
+     * @param foundGrid
+     * @param loopsCount 
+     */
+    public static void notifySolutionFound(Grid foundGrid, long loopsCount)
+    {
+        System.out.println("Correct Grid Found");
+        System.out.println("Number of loop");
+        foundGrid.show();
+        
+        //Kill all remaining Threads
+        for(int i = 0;i<maxSlave;i++)
+            slaves[i].interrupt();
+    }
     
-    public int getMaxSlave() {
-        return maxSlave;
+    public static ThreadSlave[] getSlaves(){
+        return slaves;
     }
-
-    public void setMaxSlave(int maxSlave) {
-        this.maxSlave = maxSlave;
-    }
+    
+   
     @Override
     public void run(){
         System.out.println(getName());
-        ThreadSlave slaves[] = new ThreadSlave[maxSlave];
+        slaves = new ThreadSlave[maxSlave];
         int cpt = 0;
         Iterator<Byte> it = maximalPossibility.iterator();
         while(it.hasNext()){
@@ -78,15 +95,18 @@ public class ThreadMaster extends Thread{
            Grid slaveGrid = new Grid(grid);
            slaveGrid.setCellValue(iMax, jMax, current);
            slaves[cpt] = new ThreadSlave(cpt, slaveGrid);
-           slaves[cpt].start();
+           
+        }
+        for(int i =0;i<maxSlave;i++){
+            slaves[i].start();
+        }
             try {
-                slaves[cpt].join();
+                for(int i = 0;i<maxSlave;i++){
+                    slaves[i].join();
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(ThreadMaster.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            // ICI CODE TRAITEMENT ESCLAVE TERMINE
-        }
         System.out.println("Finish");
     }
     
