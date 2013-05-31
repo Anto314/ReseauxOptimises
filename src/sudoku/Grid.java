@@ -80,7 +80,8 @@ public class Grid
         _gridSize = grid._gridSize;
         _squareWidth = grid._squareWidth;
         _squareHeight = grid._squareHeight;
-                
+        _cells = new byte[_gridSize][_gridSize];
+        _lastGridCells = new byte[_gridSize][_gridSize];
         for (int row = 0; row < _gridSize; row++)
         {
             for (int column = 0; column < _gridSize; column++)

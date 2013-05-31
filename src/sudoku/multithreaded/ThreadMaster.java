@@ -118,7 +118,7 @@ public class ThreadMaster extends Thread{
         int length = grid.getGridSize();
                 
         for(int i =0;i<length;i++)
-            for(int j =0;i<length;j++){
+            for(int j =0;j<length;j++){
                   numbers = grid.getCellMissingNumbers(i, j);
                   if(numbers!=null && numbers.size()>maxPossibility){
                       
