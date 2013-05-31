@@ -1,8 +1,5 @@
 package sudoku.multithreaded;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Iterator;
 import sudoku.Backtrack;
 import sudoku.Grid;
 
@@ -26,7 +23,7 @@ public class ThreadSlave extends Thread {
         @Override
         public boolean solve()
         {
-            if (interrupted()) return true;
+            if (interrupted()) return true; // Go to tree root (we don't care about the returned result as the solution has been found by another thread)
             return super.solve();
         }
     }
@@ -46,7 +43,6 @@ public class ThreadSlave extends Thread {
 
     @Override
     public void run() {
-        //backtrack();
         _isGridSolved = _backtrack.solve();
     }
     
@@ -74,27 +70,5 @@ public class ThreadSlave extends Thread {
     {
         return _backtrack.getLoopsCount();
     }
-    
-    /*public void backtrack(){
-        
-        if(work.isCorrectlyFilled())
-            return;
-        else if(!work.isEntirelyFilled()){
-        ArrayList<Point> emptyCells = work.getEmptyCells();
-        Iterator<Point> it = emptyCells.iterator();
-        while(it.hasNext()){
-            Point current = it.next();
-            int iCurrent = (int)current.getX();
-            int jCurrent = (int)current.getY();
-           ArrayList<Byte> possibleNumber = work.getPossibleNumberAt(iCurrent,jCurrent);
-           Iterator<Byte> it2 = possibleNumber.iterator();
-           while(it2.hasNext()){
-               work.setCell(iCurrent, jCurrent, it2.next());
-               backtrack();
-               work.setCell(iCurrent, jCurrent, (byte)0);
-           }
-        }
-    }
-   }*/
 }
     

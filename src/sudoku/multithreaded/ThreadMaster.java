@@ -84,6 +84,8 @@ public class ThreadMaster extends Thread{
             } catch (InterruptedException ex) {
                 Logger.getLogger(ThreadMaster.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            // ICI CODE TRAITEMENT ESCLAVE TERMINE
         }
         System.out.println("Finish");
     }
@@ -111,25 +113,6 @@ public class ThreadMaster extends Thread{
     }*/
     
     public void prepare(){
-       /* int maxPossibility = -1;
-        int width = grid.getWidth();
-        int height = grid.getHeight();
-        
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {    
-                ArrayList<Byte> a = grid.getPossibleNumberAt(i, j);
-                if (a == null) continue; // Cell is filled yet
-                
-                if(a.size()>maxPossibility){
-                    maximalPossibility = a;
-                    maxPossibility = a.size();
-                    iMax = i;
-                    jMax = j;
-                }
-            }
-        }
-        maxSlave = maxPossibility;*/
+       // TODO
     }
 }
