@@ -9,6 +9,9 @@ import sudoku.Grid;
  */
 public class Main 
 {
+    /** Set to true to turn on debug stuff. */
+    public static final boolean DEBUG = false;
+    
     public static void main(String args[])
     {
         // Show title
@@ -61,20 +64,5 @@ public class Main
             tm.join();
         }
         catch (InterruptedException e) {}
-        
-        /*Backtrack backtrack = new Backtrack(grid);
-        if (backtrack.solve())
-        {
-            System.out.println("Grid successfully solved in " + backtrack.getLoopsCount() + " loops.");
-            backtrack.getGrid().show();
-            System.exit(0); // Useful for tests to indicate a solving success
-        }
-        else
-        {
-            System.out.println("Failure : can't solve this grid.");
-            System.out.println("Found grid :");
-            backtrack.getGrid().show();
-            System.exit(-1);
-        }*/
     }
 }

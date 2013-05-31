@@ -41,6 +41,10 @@ public class ThreadMaster extends Thread{
      * all ThreadSlave handled by the ThreadMaster
      */
     private static ThreadSlave slaves[];
+    
+    /** Used by notifySolutionFound() to process only the first call. */
+    private static boolean _isFirstCall = true;
+    
      /**
      * Create a new ThreadMaster
      * @param name name given to this Thread
@@ -64,12 +68,18 @@ public class ThreadMaster extends Thread{
     }
     
     /**
-     * Commentaire à mettre
+     * Notify the master that a slave has found the solution.
+     * Terminate all running slaves and show the solved grid.
      * @param foundGrid
      * @param loopsCount 
      */
     public static void notifySolutionFound(Grid foundGrid, long loopsCount)
     {
+        // To quit the backtrack tree slaves have to say they have solved the grid
+        // To avoid showing a bad grid provided by a killed slave, only the first call (done by the slave which found the grid) is allowed
+        if (!_isFirstCall) return;
+        _isFirstCall = false;
+        
         System.out.println("Correct Grid Found");
         System.out.println("Number of loop : "+loopsCount);
         foundGrid.show();
@@ -90,7 +100,7 @@ public class ThreadMaster extends Thread{
     public void run(){
         int cpt = 0;
         prepare();
-        System.out.println(getName());
+        if (Main.DEBUG) System.out.println(getName());
         slaves = new ThreadSlave[maxSlave];
         Iterator<Byte> it = maximalPossibility.iterator();
         while(it.hasNext()){

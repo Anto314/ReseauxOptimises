@@ -8,7 +8,8 @@ import sudoku.Grid;
  *
  * @author Antoine MOISE and Adrien RICCIARDI
  */
-public class ThreadSlave extends Thread {
+public class ThreadSlave extends Thread 
+{
     /** This the same version than the monothreaded backtrack except that it can be interrupted at any time. */
     private class BacktrackInterruptible extends Backtrack
     {
@@ -28,49 +29,29 @@ public class ThreadSlave extends Thread {
         }
     }
 
-   // private Grid work;
-    
     /** The backtrack solving job done by this thread. */
     private Backtrack _backtrack;
-    /** Tell if the thread has found the solution or not. */
-   // private boolean _isGridSolved;
     
+    /** Create a slave thread.
+     * @param threadNumber A number identifying the thread for debugging.
+     * @param work The grid to work with.
+     */
     public ThreadSlave(int threadNumber, Grid work) {
         this.setName("Slave" + Integer.toString(threadNumber));
-        //this.work = work;
         _backtrack = new BacktrackInterruptible(work);
     }
 
     @Override
-    public void run() {
-        //_isGridSolved = _backtrack.solve();
+    public void run() 
+    {
+        if (Main.DEBUG) System.out.println(getName());
+        
         // Only the thread which found the solution can tell the master
-        if (_backtrack.solve()) ThreadMaster.notifySolutionFound(_backtrack.getGrid(), _backtrack.getLoopsCount());
+        if (_backtrack.solve())
+        {
+            if (Main.DEBUG) System.out.println("Correct solution found by " + getName());
+            ThreadMaster.notifySolutionFound(_backtrack.getGrid(), _backtrack.getLoopsCount());
+        }
     }
-    
-    /** Tell if the thread has found or not the solution.
-     * This function must be called when the thread terminated.
-     * @return true if the solution was found or false if not.
-     */
-   /* public boolean isGridSolved()
-    {
-        return _isGridSolved;
-    }*/
-    
-    /** Get the thread working grid.
-     * @return The grid.
-     */
-  /*  public Grid getGrid()
-    {
-        return work;
-    }*/
-    
-    /** How many loops were necessaty to solve the grid.
-     * @return The loops count.
-     */
- /*   public long getLoopsCount()
-    {
-        return _backtrack.getLoopsCount();
-    }*/
 }
     
