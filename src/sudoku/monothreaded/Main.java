@@ -1,5 +1,6 @@
 package sudoku.monothreaded;
 
+import sudoku.Backtrack;
 import java.io.FileNotFoundException;
 import sudoku.Grid;
 
@@ -20,7 +21,7 @@ public class Main
         {
             assert false;
             System.out.println("Error : assertions must be enabled (add -ea to java command line).");
-            return;
+            System.exit(-1);
         }
         catch (AssertionError error) {}
                 
@@ -29,7 +30,7 @@ public class Main
         {
             System.out.println("Error : bad arguments.");
             System.out.println("Usage : Sudoku Grid_File_Name");
-            return;
+            System.exit(-1);
         }
         
         // Try to load the provided grid file
@@ -41,7 +42,8 @@ public class Main
         catch (FileNotFoundException exception)
         {
             System.out.println("Error : can't find '" + args[0]);
-            return;
+            System.exit(-1);
+            return; // NetBeans does not allow the use of System.exit() alone (it believes that grid variable is not initialized)
         }
         
         // Show file name
@@ -54,12 +56,15 @@ public class Main
         if (backtrack.solve())
         {
             System.out.println("Grid successfully solved in " + backtrack.getLoopsCount() + " loops.");
+            backtrack.getGrid().show();
+            System.exit(0); // Useful for tests to indicate a solving success
         }
         else
         {
             System.out.println("Failure : can't solve this grid.");
             System.out.println("Found grid :");
+            backtrack.getGrid().show();
+            System.exit(-1);
         }
-        backtrack.getGrid().show();
     }
 }

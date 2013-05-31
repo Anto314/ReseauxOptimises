@@ -195,34 +195,6 @@ public class Grid
         return _height;
     }*/
     
-    /**
-     * Compute figure that can be put at cass (i,j) according to Sudoku rule
-     *
-     * @param i row index
-     * @param j column index
-     * @return all possible figure
-     */
-    /*public ArrayList<Byte> getPossibleNumberAt(int i, int j) {
-        boolean figureRow[] = new boolean[9];
-        boolean figureColumn[] = new boolean[9];
-        ArrayList<Byte> possibleNumber = new ArrayList<Byte>();
-        for (int k = 0; k < _width; k++) {
-            figureRow[k] = false;
-            figureColumn[k] = false;
-        }
-        
-        for(int k = 0;k<_width;k++){
-            figureRow[_cells[i][k]-1] = true;
-            figureColumn[_cells[k][j]-1] = true;  
-        }
-        
-        for(int k =0;k<_width;k++){
-            if(!figureRow[k] && !figureColumn[k])
-                possibleNumber.add(new Byte((byte)(k+1)));
-        }
-        return possibleNumber;
-    }*/
-    
     /** Set a cell value.
      * @param row Cell row coordinate.
      * @param column Cell column coordinate.

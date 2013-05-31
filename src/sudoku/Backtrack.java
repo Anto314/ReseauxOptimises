@@ -1,8 +1,7 @@
-package sudoku.monothreaded;
+package sudoku;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import sudoku.Grid;
 
 /** Monothreaded backtrack solving algorithm.
  * @author Antoine MOISE and Adrien RICCIARDI
