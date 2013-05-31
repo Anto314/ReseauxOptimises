@@ -75,8 +75,10 @@ public class ThreadMaster extends Thread{
         foundGrid.show();
         
         //Kill all remaining Threads
-        for(int i = 0;i<maxSlave;i++)
-            slaves[i].interrupt();
+        for(int i = 0;i<maxSlave;i++){
+            if(slaves[i].isAlive())
+                slaves[i].interrupt();
+        }
     }
     
     public static ThreadSlave[] getSlaves(){
@@ -92,14 +94,15 @@ public class ThreadMaster extends Thread{
         slaves = new ThreadSlave[maxSlave];
         Iterator<Byte> it = maximalPossibility.iterator();
         while(it.hasNext()){
-            byte current = it.next();
+           byte current = it.next();
            Grid slaveGrid = new Grid(grid);
            slaveGrid.setCellValue(iMax, jMax, current);
            slaves[cpt] = new ThreadSlave(cpt, slaveGrid);
-           
+           cpt++;
         }
         for(int i =0;i<maxSlave;i++){
             slaves[i].start();
+            System.out.println("i = "+i);
         }
             try {
                 for(int i = 0;i<maxSlave;i++){
